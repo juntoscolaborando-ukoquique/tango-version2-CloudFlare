@@ -1,0 +1,38 @@
+#!/usr/bin/env bash
+#
+# pre-commit
+#
+# Blocks any commit that would stage something under private_core/.
+# This is the actual failure mode this whole setup is trying to prevent:
+# .gitignore protects you until someone runs `git add -A --force`, has a
+# typo in the ignore rule, or adds the folder under a slightly different
+# path. This hook catches that at commit time regardless of how it got
+# staged.
+#
+# Install (once, per local clone -- this is NOT automatic, git does not
+# read hooks/ by default):
+#   git config core.hooksPath hooks
+#
+# After that, `git commit` runs this automatically. To verify it's active:
+#   git config core.hooksPath   # should print: hooks
+
+set -euo pipefail
+
+if git diff --cached --name-only | grep -q '^private_core/'; then
+  echo "" >&2
+  echo "COMMIT BLOQUEADO: hay archivos de private_core/ en el staging area." >&2
+  echo "" >&2
+  echo "private_core/ contiene el motor de cifrado y el corpus secreto" >&2
+  echo "clonados desde el repo privado -- nunca debe llegar a este repo." >&2
+  echo "" >&2
+  echo "Archivos detectados:" >&2
+  git diff --cached --name-only | grep '^private_core/' | sed 's/^/  /' >&2
+  echo "" >&2
+  echo "Para destagearlos:" >&2
+  echo "  git restore --staged private_core/" >&2
+  echo "" >&2
+  exit 1
+fi
+
+exit 0
+

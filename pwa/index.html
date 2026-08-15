@@ -1,0 +1,456 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="theme-color" content="#1a110f" />
+
+<!-- iOS-specific PWA meta tags. Safari ignores several manifest.json
+     fields (notably `display: standalone` and `orientation`), so these
+     are required -- not cosmetic -- for the installed icon to launch in
+     standalone mode instead of a plain Safari tab with browser chrome. -->
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="apple-mobile-web-app-title" content="Tango" />
+
+<title>Tango Cifrado</title>
+<link rel="manifest" href="./manifest.json" />
+<link rel="icon" href="./icons/icon-192.png" />
+<link rel="apple-touch-icon" href="./icons/icon-192.png" />
+<style>
+  @font-face {
+    font-family: "IBM Plex Mono";
+    src: url("./fonts/IBMPlexMono-Regular.ttf") format("truetype");
+    font-weight: 400;
+    font-display: swap;
+  }
+  @font-face {
+    font-family: "IBM Plex Mono";
+    src: url("./fonts/IBMPlexMono-Bold.ttf") format("truetype");
+    font-weight: 700;
+    font-display: swap;
+  }
+
+  :root {
+    --bg: #1a110f;
+    --surface: #241715;
+    --surface-2: #2e1e19;
+    --line: #40291f;
+    --ink: #f3e9db;
+    --muted: #b7a08a;
+    --brass: #c98a3b;
+    --brass-soft: #8a5f2b;
+    --wine: #a3495a;
+    --good: #7f9f6d;
+
+    --display: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    --body: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    /* Display-specific typographic tweaks (weight / tracking) */
+    --display-weight: 700;
+    --display-tracking: 0.02em;
+    --mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  }
+
+  /* Reverted global font-size change; apply targeted increases below */
+
+  * { box-sizing: border-box; }
+
+  html {
+    font-size: 17px;
+  }
+
+  html, body {
+    margin: 0;
+    padding: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--body);
+    line-height: 1.55;
+  }
+
+  body {
+    min-height: 100vh;
+    min-height: 100dvh;
+    padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+    display: flex;
+    justify-content: center;
+  }
+
+  main {
+    width: 100%;
+    max-width: 520px;
+    padding: 2rem 1.25rem 3rem;
+  }
+
+  header.app-header {
+    text-align: center;
+    margin-bottom: 1.75rem;
+  }
+
+  header.app-header h1 {
+    font-family: var(--display);
+    font-weight: var(--display-weight);
+    font-size: 2.4rem;
+    letter-spacing: var(--display-tracking);
+    margin: 0 0 0.4rem;
+  }
+
+  header.app-header .rule {
+    width: 80px;
+    height: 2px;
+    background: var(--brass);
+    margin: 0 auto 0.6rem;
+    border: none;
+  }
+
+  header.app-header p {
+    color: var(--muted);
+    font-size: 1.05rem;
+    margin: 0;
+    font-style: normal;
+  }
+
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 1.5rem;
+  }
+
+  .card + .card { margin-top: 1rem; }
+
+  label {
+    display: block;
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--muted);
+    margin-bottom: 0.5rem;
+  }
+
+  input[type="password"],
+  input[type="text"],
+  textarea,
+  select {
+    width: 100%;
+    background: var(--surface-2);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    color: var(--ink);
+    font-family: var(--body);
+    font-size: 1.1rem;
+    padding: 0.8rem 0.9rem;
+    line-height: 1.5;
+  }
+
+  textarea { min-height: 7.5rem; resize: vertical; }
+
+  input:focus-visible,
+  textarea:focus-visible,
+  select:focus-visible,
+  button:focus-visible {
+    outline: 2px solid var(--brass);
+    outline-offset: 2px;
+  }
+
+  .field { margin-bottom: 1.1rem; }
+  .field:last-child { margin-bottom: 0; }
+
+  button {
+    font-family: var(--body);
+    font-weight: 600;
+    font-size: 1.05rem;
+    border-radius: 10px;
+    border: 1px solid var(--brass-soft);
+    background: transparent;
+    color: var(--ink);
+    padding: 0.8rem 1rem;
+    cursor: pointer;
+  }
+
+  button.primary {
+    background: var(--brass);
+    color: #1a110f;
+    border-color: var(--brass);
+  }
+
+  button:disabled { opacity: 0.55; cursor: not-allowed; }
+
+  button.secondary {
+    background: transparent;
+    color: var(--brass);
+    border: 1px solid var(--brass);
+    width: 100%;
+    margin-top: 0.5rem;
+  }
+  button.secondary:hover { background: rgba(180,140,60,0.12); }
+
+  #open-file-row { margin-top: 0.25rem; }
+
+  button.link {
+    border: none;
+    background: none;
+    color: var(--muted);
+    text-decoration: underline;
+    padding: 0.25rem 0;
+    font-weight: 500;
+    font-size: 0.95rem;
+  }
+
+  .status {
+    margin-top: 0.75rem;
+    font-size: 0.95rem;
+    min-height: 1.4rem;
+  }
+  .status[data-kind="error"] { color: var(--wine); }
+  .status[data-kind="success"] { color: var(--good); }
+  .status[data-kind="info"] { color: var(--muted); }
+
+  /* --- mode tabs --- */
+  .tabs {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 1.25rem;
+  }
+  .tabs button {
+    flex: 1;
+    border-color: var(--line);
+  }
+  .tabs button.is-active {
+    background: var(--surface-2);
+    border-color: var(--brass);
+    color: var(--brass);
+  }
+
+  /* --- coordinate strip: the signature element ---
+     Cipher output rendered as ticker-tape / telegram-strip tiles, since
+     that's literally the token grammar (V01P02-~20-...), not decoration. */
+  #output-strip {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin-top: 1.1rem;
+    min-height: 1.8rem;
+  }
+
+  .chip {
+    font-family: var(--mono);
+    font-size: 0.9rem;
+    background: var(--surface-2);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    padding: 0.4rem 0.55rem;
+    color: var(--ink);
+    line-height: 1.1;
+  }
+
+  .chip--key {
+    border-color: var(--brass);
+    color: var(--brass);
+    font-weight: 600;
+  }
+
+  .plain-output {
+    font-family: var(--body);
+    font-size: 1.1rem;
+    margin: 0;
+    white-space: pre-wrap;
+    padding: 0.4rem 0;
+  }
+
+  .run-row {
+    display: flex;
+    gap: 0.6rem;
+    margin-top: 1.25rem;
+  }
+  .run-row button { flex: 1; }
+
+  #send-row {
+    display: flex;
+    gap: 0.6rem;
+    margin-top: 1rem;
+  }
+  #send-row button { flex: 1; }
+
+  #settings-panel { margin-top: 1rem; }
+
+  p.muted,
+  #bundle-info {
+    color: var(--muted);
+    font-size: 0.9rem;
+    margin-top: 0.75rem;
+    margin-bottom: 0;
+  }
+
+  footer.hint {
+    text-align: center;
+    color: var(--muted);
+    font-size: 0.85rem;
+    margin-top: 1.5rem;
+    line-height: 1.6;
+  }
+
+  /* targeted hint styling for unlock + PIN screens */
+  .unlock-hint {
+    color: var(--muted);
+    font-size: 1rem;
+    margin-top: -0.3rem;
+    margin-bottom: 1rem;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .card { transition: opacity 180ms ease; }
+  }
+</style>
+</head>
+<body>
+<main>
+  <header class="app-header">
+    <h1>Tango Cifrado</h1>
+    <hr class="rule" />
+    <p>Coordenadas de tango, cifradas sobre Telegram.</p>
+  </header>
+
+  <!-- ================= FIRST RUN ================= -->
+  <section id="unlock-screen" class="card" hidden>
+    <label for="clave-despliegue">Clave de despliegue</label>
+    <p class="unlock-hint">
+      Se pide una sola vez. A partir de acá, abrí y usá — sin contraseña.
+    </p>
+    <form id="unlock-form">
+      <div class="field">
+        <input type="password" id="clave-despliegue" autocomplete="off" placeholder="•••••••••••••••••" />
+      </div>
+      <button type="submit" class="primary" id="unlock-submit" style="width:100%;">Desbloquear</button>
+    </form>
+    <p class="status" id="unlock-status" role="status" aria-live="polite"></p>
+  </section>
+
+  <!-- ================= PIN UNLOCK (device vault) ================= -->
+  <section id="pin-unlock-screen" class="card" hidden>
+    <label for="device-pin">PIN del dispositivo</label>
+    <p class="unlock-hint">
+      Este dispositivo está protegido con PIN. Ingresalo para continuar.
+    </p>
+    <form id="pin-unlock-form">
+      <div class="field">
+        <input type="password" id="device-pin" inputmode="numeric" autocomplete="off" placeholder="••••" />
+      </div>
+      <button type="submit" class="primary" id="pin-unlock-submit" style="width:100%;">Desbloquear</button>
+    </form>
+    <p class="status" id="pin-unlock-status" role="status" aria-live="polite"></p>
+  </section>
+
+  <!-- ================= MAIN APP ================= -->
+  <section id="app-screen" hidden>
+    <div class="card">
+      <div class="tabs">
+        <button type="button" id="mode-cifrar" class="is-active">Cifrar</button>
+        <button type="button" id="mode-descifrar">Descifrar</button>
+      </div>
+
+      <div class="field" id="tango-field">
+        <label for="tango-select">Tango</label>
+        <select id="tango-select"></select>
+      </div>
+
+      <div class="field">
+        <label for="message-input" id="message-label">Mensaje</label>
+        <textarea id="message-input" placeholder="Escribí el mensaje…"></textarea>
+      </div>
+
+      <div class="run-row">
+        <button type="button" class="primary" id="run-action">Cifrar</button>
+      </div>
+
+      <!-- Shown only in Descifrar mode — triggers the hidden file input so
+           the receiver can open a .txt attachment sent via documentTransport. -->
+      <div id="open-file-row" hidden>
+        <button type="button" class="secondary" id="open-file-button">Abrir archivo cifrado (.txt)</button>
+      </div>
+
+      <div id="output-strip" aria-live="polite"></div>
+
+      <div id="send-row" hidden>
+        <button type="button" id="copy-button">Copiar</button>
+        <button type="button" class="primary" id="send-button">Enviar a Telegram</button>
+      </div>
+
+      <p class="status" id="composer-status" role="status" aria-live="polite"></p>
+
+      <!-- Hidden file input for receiving ciphertext via document transport.
+           Activated by app.js when the user opens a .txt attachment from Telegram.
+           Also used as fallback before Web Share Target is fully wired. -->
+      <input type="file" id="open-file" accept=".txt,text/plain" hidden aria-hidden="true">
+    </div>
+
+    <div class="card">
+      <button type="button" class="link" id="settings-toggle">Ajustes de Telegram ▾</button>
+      <div id="settings-panel" hidden>
+        <form id="settings-form">
+          <div class="field">
+            <label for="bot-token">Bot token</label>
+            <input type="password" id="bot-token" autocomplete="off" placeholder="123456:ABC…" />
+          </div>
+          <div class="field">
+            <label for="chat-id">Chat ID</label>
+            <input type="text" id="chat-id" autocomplete="off" placeholder="123456789" />
+          </div>
+          <button type="submit" class="primary" style="width:100%;">Guardar</button>
+        </form>
+        <p class="status" id="settings-status" role="status" aria-live="polite"></p>
+        <p class="muted" id="bundle-info"></p>
+      </div>
+    </div>
+
+    <div class="card">
+      <button type="button" class="link" id="security-toggle">Seguridad del dispositivo ▾</button>
+      <div id="security-panel" hidden>
+        <p class="status" id="security-mode-status" role="status" aria-live="polite"></p>
+
+        <form id="enable-pin-form">
+          <div class="field">
+            <label for="new-pin">Nuevo PIN</label>
+            <input type="password" id="new-pin" inputmode="numeric" autocomplete="off" placeholder="Mínimo 4 dígitos" />
+          </div>
+          <div class="field">
+            <label for="confirm-pin">Confirmar PIN</label>
+            <input type="password" id="confirm-pin" inputmode="numeric" autocomplete="off" placeholder="Repetí el PIN" />
+          </div>
+          <button type="submit" class="primary" style="width:100%;">Activar PIN</button>
+        </form>
+
+        <button type="button" id="disable-pin-button" hidden style="width:100%;">Desactivar PIN</button>
+
+        <p class="status" id="security-status" role="status" aria-live="polite"></p>
+      </div>
+    </div>
+
+    <div class="card">
+      <button type="button" class="link" id="maintenance-toggle">Mantenimiento ▾</button>
+      <div id="maintenance-panel" hidden>
+        <p class="muted">
+          Si acabás de instalar una versión nueva y la app sigue mostrando
+          contenido viejo (pantallas, botones o textos desactualizados),
+          usá esto en vez de los pasos manuales de TROUBLESHOOTING.md.
+        </p>
+        <button type="button" id="clear-cache-button" style="width:100%;">Vaciar caché y reiniciar</button>
+        <p class="muted" style="margin-top:4px;">
+          Vas a tener que ingresar la clave de despliegue de nuevo después de esto.
+        </p>
+        <p class="status" id="maintenance-status" role="status" aria-live="polite"></p>
+      </div>
+    </div>
+
+    <footer class="hint">
+      Si esta pantalla vuelve a pedir la clave de despliegue, es porque se borraron los datos del navegador — ver TROUBLESHOOTING.md.
+    </footer>
+  </section>
+</main>
+
+<script type="module" src="./app.js"></script>
+</body>
+</html>
+
+

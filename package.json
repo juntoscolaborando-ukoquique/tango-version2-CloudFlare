@@ -1,0 +1,16 @@
+{
+  "type": "module",
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "scripts": {
+    "test": "node --test tests/js/*.test.mjs pwa/core/tcmp/protocol.test.mjs",
+    "format": "prettier --write 'pwa/**/*.js' 'tests/**/*.mjs'",
+    "format:check": "prettier --check 'pwa/**/*.js' 'tests/**/*.mjs'"
+  },
+  "devDependencies": {
+    "fake-indexeddb": "^6.0.0",
+    "prettier": "^3.9.6"
+  }
+}
+

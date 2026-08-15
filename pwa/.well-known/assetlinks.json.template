@@ -1,0 +1,25 @@
+[
+  {
+    "_comment": "DIGITAL ASSET LINKS — SIN ESTE ARCHIVO LA TWA MUESTRA LA BARRA DE CHROME.",
+    "_ubicacion_alternativa": [
+      "Este template vive en pwa/.well-known/ como copia de seguridad.",
+      "LA VERSIÓN QUE TIENE QUE ESTAR PÚBLICA es /.well-known/assetlinks.json (en la RAÍZ del Pages),",
+      "es decir: ../.well-known/assetlinks.json respecto de este archivo (sin /pwa/ en el medio).",
+      "Si tu Pages está configurado para servir la carpeta /pwa/ como root, entonces este archivo",
+      "sin el .template es el que sirve. Si el Pages sirve la raíz del repo, el que sirve es el",
+      "hermano de nivel superior (el que está en ../../.well-known/).",
+      "Ambas carpetas tienen el mismo .template para que no te olvides de ninguna."
+    ],
+    "relation": [
+      "delegate_permission/common.handle_all_urls"
+    ],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.tangocifrado.app",
+      "sha256_cert_fingerprints": [
+        "TODO_TU_SHA256_AQUI"
+      ]
+    }
+  }
+]
+

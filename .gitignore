@@ -1,0 +1,31 @@
+# Secrets — never commit
+.env
+
+# Private corpus (vendored snapshot — never expose tangos.json or cipher_engine.py)
+private_core/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.pytest_cache/
+venv/
+.venv/
+
+# Node
+node_modules/
+
+# Android build artefacts
+tango-cifrado-apk/app/build/
+tango-cifrado-apk/build/
+tango-cifrado-apk/.gradle/
+tango-cifrado-apk/app/src/main/res/values/strings.xml
+tango-cifrado-apk/app/src/main/res/values/colors.xml
+tango-cifrado-apk/dist/
+*.keystore
+*.jks
+
+# Editor / OS
+.DS_Store
+Thumbs.db
+*.swp

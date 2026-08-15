@@ -1,0 +1,93 @@
+{
+  "_comment": "Shared golden test vectors for cross-engine consistency (P3-6). Both tests/python/test_cipher_engine.py and tests/js/cipherEngine.test.mjs load this file and assert against it. See TO_FIX.md P3-6 and SHARED_CIPHER_VECTORS.md for full rationale.",
+  "corpus": {
+    "3": {
+      "titulo": "Cambalache",
+      "versos": [
+        ["Que", "el", "mundo", "fue", "y", "será", "una", "porquería", "ya", "lo", "sé"],
+        ["mañana", "subir", "este", "artículo", "que", "te", "di", "ayer"]
+      ]
+    }
+  },
+  "salt": 47,
+  "cases": [
+    {
+      "name": "single_word_in_corpus",
+      "id_tango": "3",
+      "mensaje": "el",
+      "ciphertext": "50-V01P02",
+      "_note": "Single-occurrence word, no case flag. Tango 3 + salt 47 = masked key 50."
+    },
+    {
+      "name": "word_with_space_and_punctuation",
+      "id_tango": "3",
+      "mensaje": "el mundo",
+      "ciphertext": "50-V01P02-~20-V01P03",
+      "_note": "Two words separated by a space. Space = ~20 (U+0020 as hex)."
+    },
+    {
+      "name": "capitalized_word",
+      "id_tango": "3",
+      "mensaje": "El",
+      "ciphertext": "50-V01P02^C",
+      "_note": "First letter capitalised -> ^C flag appended to coordinate."
+    },
+    {
+      "name": "all_uppercase_word",
+      "id_tango": "3",
+      "mensaje": "FUE",
+      "ciphertext": "50-V01P04^U",
+      "_note": "All-caps -> ^U flag. 'fue' is single-occurrence (V01P04)."
+    },
+    {
+      "name": "word_in_second_verso",
+      "id_tango": "3",
+      "mensaje": "mañana",
+      "ciphertext": "50-V02P01",
+      "_note": "Single-occurrence word in second verso. Tests non-ascii char in corpus."
+    },
+    {
+      "name": "punctuation_preserved",
+      "id_tango": "3",
+      "mensaje": "el,mundo",
+      "ciphertext": "50-V01P02-~2c-V01P03",
+      "_note": "Comma = ~2c (U+002C). Punctuation tokens interleave with word tokens."
+    },
+    {
+      "name": "out_of_corpus_word",
+      "id_tango": "3",
+      "mensaje": "algoritmo",
+      "roundtrip_only": true,
+      "_note": "Word absent from corpus -> PBKDF2-derived #hex fallback. Keystream is context-bound so ciphertext is not deterministic across runs, but decrypt(encrypt(x)) must round-trip to x in both engines."
+    },
+    {
+      "name": "digit_run",
+      "id_tango": "3",
+      "mensaje": "123",
+      "roundtrip_only": true,
+      "_note": "Consecutive digits are grouped as a single fallback token. Non-deterministic ciphertext; round-trip only."
+    },
+    {
+      "name": "mixed_corpus_and_fallback",
+      "id_tango": "3",
+      "mensaje": "el x",
+      "roundtrip_only": true,
+      "_note": "'el' is in corpus (deterministic), 'x' is not (fallback, non-deterministic). Round-trip only because the fallback token is context-bound."
+    },
+    {
+      "name": "invalid_tango_id_raises",
+      "id_tango": "99",
+      "mensaje": "el",
+      "error": true,
+      "_note": "Tango ID 99 does not exist in the corpus. Both engines must raise."
+    },
+    {
+      "name": "metadata_key_raises",
+      "id_tango": "_nota",
+      "mensaje": "el",
+      "error": true,
+      "_note": "Keys starting with '_' are metadata, not tangos. Both engines must reject them."
+    }
+  ]
+}
+

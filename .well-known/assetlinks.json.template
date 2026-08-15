@@ -1,0 +1,32 @@
+[
+  {
+    "_comment": "DIGITAL ASSET LINKS — SIN ESTE ARCHIVO LA TWA MUESTRA LA BARRA DE CHROME.",
+    "_instrucciones": [
+      "1. Reemplazar TODO_TU_SHA256_AQUI por el fingerprint de tu android.keystore.",
+      "   Para obtenerlo: cd tango-cifrado-apk && keytool -list -v -keystore android.keystore -alias android | grep SHA256",
+      "2. Copiar este archivo a: .well-known/assetlinks.json (SIN el .template).",
+      "3. Asegurarse de que GitHub Pages lo sirva en la RAÍZ del sitio:",
+      "   https://misbusquedaspersonales-cyber.github.io/tango_cipher_bot_public/.well-known/assetlinks.json",
+      "   Si el Pages está enraizado en el repo y no en /pwa/, el archivo va en .well-known/ del root,",
+      "   NO dentro de pwa/.well-known/. Probar la URL real con curl antes de continuar.",
+      "4. Verificar con la herramienta de Google:",
+      "   https://developers.google.com/digital-asset-links/tools/generator",
+      "   → Domain: misbusquedaspersonales-cyber.github.io",
+      "   → App package name: com.tangocifrado.app",
+      "   → App package fingerprint (SHA256): el MISMO que pusiste abajo",
+      "5. Si agregás más fingerprints (release key distinta, debug key, etc.),",
+      "   metelas todas en el array sha256_cert_fingerprints — una entrada por cada key."
+    ],
+    "relation": [
+      "delegate_permission/common.handle_all_urls"
+    ],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.tangocifrado.app",
+      "sha256_cert_fingerprints": [
+        "TODO_TU_SHA256_AQUI"
+      ]
+    }
+  }
+]
+

@@ -1,0 +1,48 @@
+{
+  "name": "Tango Cifrado",
+  "short_name": "Tango",
+  "description": "Mensajería cifrada por coordenadas de tango, transportada sobre Telegram.",
+  "start_url": "https://misbusquedaspersonales-cyber.github.io/tango_cipher_bot_public/pwa/index.html?src=pwa-install",
+  "scope": "https://misbusquedaspersonales-cyber.github.io/tango_cipher_bot_public/pwa/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#1a110f",
+  "theme_color": "#1a110f",
+  "lang": "es",
+  "categories": ["communication", "productivity", "security"],
+  "prefer_related_applications": false,
+  "icons": [
+    {
+      "src": "https://misbusquedaspersonales-cyber.github.io/tango_cipher_bot_public/pwa/icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "https://misbusquedaspersonales-cyber.github.io/tango_cipher_bot_public/pwa/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "https://misbusquedaspersonales-cyber.github.io/tango_cipher_bot_public/pwa/icons/icon-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "share_target": {
+    "action": "https://misbusquedaspersonales-cyber.github.io/tango_cipher_bot_public/pwa/index.html?src=shared-file",
+    "method": "POST",
+    "enctype": "multipart/form-data",
+    "params": {
+      "files": [
+        {
+          "name": "shared_file",
+          "accept": ["text/plain", ".txt"]
+        }
+      ]
+    }
+  }
+}
+

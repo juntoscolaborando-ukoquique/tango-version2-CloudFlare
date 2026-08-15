@@ -1,0 +1,41 @@
+#!/usr/bin/env bash
+# tango-url — imprime la URL de la PWA y la copia al portapapeles si es posible.
+set -euo pipefail
+
+TANGO_URL="https://misbusquedaspersonales-cyber.github.io/tango_cipher_bot_public/pwa/index.html"
+TANGO_SHORT_URL="https://misbusquedaspersonales-cyber.github.io/tango_cipher_bot_public/"
+
+if [ "${1:-}" = "--short" ] || [ "${1:-}" = "-s" ]; then
+  TARGET="$TANGO_SHORT_URL"
+  LABEL="short"
+else
+  TARGET="$TANGO_URL"
+  LABEL="full"
+fi
+
+echo "Tango Cifrado URL ($LABEL):"
+echo "  $TARGET"
+
+copied=0
+if command -v xclip >/dev/null 2>&1; then
+  printf '%s' "$TARGET" | xclip -selection clipboard
+  copied=1; tool="xclip"
+elif command -v wl-copy >/dev/null 2>&1; then
+  printf '%s' "$TARGET" | wl-copy
+  copied=1; tool="wl-copy"
+elif command -v pbcopy >/dev/null 2>&1; then
+  printf '%s' "$TARGET" | pbcopy
+  copied=1; tool="pbcopy"
+fi
+
+if [ "$copied" -eq 1 ]; then
+  echo "  (copiado al clipboard con $tool)"
+fi
+
+================================================================================
+SUMMARY
+================================================================================
+Files processed: 91
+Total lines: 11059
+Total characters: 541369
+================================================================================

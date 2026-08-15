@@ -1,0 +1,16 @@
+name = "tango-cifrado-worker"
+main = "worker/index.js"
+compatibility_date = "2026-08-15"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "tango-cifrado"
+database_id = "REEMPLAZAR_CON_D1_DATABASE_ID"
+migrations_dir = "migrations"
+
+[[r2_buckets]]
+binding = "BUCKET"
+bucket_name = "tango-cifrado-attachments"
+
+[vars]
+# ADMIN_BOOTSTRAP_TOKEN debe configurarse como secret, no aquí.

@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+# tango-cli — wrapper para correr el CLI de pruebas (main.py) desde cualquier
+# carpeta. Activa el venv si existe, sino usa el python3 del sistema.
+set -euo pipefail
+
+DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
+cd "$DIR"
+
+if [ -f "$DIR/venv/bin/activate" ]; then
+  source "$DIR/venv/bin/activate"
+fi
+
+exec python3 main.py "$@"
+

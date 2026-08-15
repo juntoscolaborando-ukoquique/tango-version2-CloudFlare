@@ -1,0 +1,34 @@
+{
+  "packageId": "com.tangocifrado.app",
+  "host": "misbusquedaspersonales-cyber.github.io",
+  "name": "Tango Cifrado",
+  "launcherName": "Tango Cifrado",
+  "themeColor": "#1a110f",
+  "backgroundColor": "#1a110f",
+  "navigationColor": "#1a110f",
+  "navigationColorDark": "#0a0605",
+  "navigationDividerColor": "#2a1a15",
+  "startUrl": "/tango_cipher_bot_public/pwa/index.html?src=twa-apk",
+  "iconUrl": "https://misbusquedaspersonales-cyber.github.io/tango_cipher_bot_public/pwa/icons/icon-512.png",
+  "maskableIconUrl": "https://misbusquedaspersonales-cyber.github.io/tango_cipher_bot_public/pwa/icons/icon-maskable-512.png",
+  "display": "standalone",
+  "orientation": "portrait",
+  "minSdkVersion": 21,
+  "targetSdkVersion": 36,
+  "serviceAccountJsonFile": "",
+  "fingerprints": [],
+  "enableNotifications": false,
+  "enableGeolocation": false,
+  "enableSiteSettingsShortcut": true,
+  "isChromeOSOnly": false,
+  "isMetaQuery": false,
+  "retainedBundles": [],
+  "versionCode": 8,
+  "versionName": "1.3.4",
+  "signingKey": {
+    "path": "/root/tango-signing/android.keystore",
+    "alias": "android"
+  },
+  "splashScreenFadeOutDuration": 300
+}
+
