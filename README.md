@@ -1,5 +1,15 @@
 # Tango Cifrado — Sistema de Cifrado Híbrido
 
+> ## ⚠️ VERSIÓN ABANDONADA
+>
+> Este repositorio está archivado y no recibe mantenimiento.
+>
+> La migración de Telegram a Cloudflare se realizó de forma incremental sobre una base que ya cargaba demasiado peso del diseño anterior. El resultado es una implementación híbrida que mantiene las prácticas de Telegram (transporte, formato de mensajes, flujo de autenticación) mientras intenta añadir encima una capa TCMP/Cloudflare — lo que produce dos sistemas parciales en lugar de uno completo. Las abstracciones necesarias para hacer esa transición limpia (identidad de dispositivo, inbox propio, adjuntos cifrados de punta a punta) estaban bocetadas pero nunca llegaron a una implementación básica funcional de extremo a extremo.
+>
+> La conclusión es que una reescritura desde cero, diseñando primero el protocolo sin el legado de Telegram, producirá un resultado más sólido y más fácil de auditar que continuar parcheando esta versión.
+>
+> El código se conserva como referencia histórica y como fuente de decisiones de diseño documentadas (ver `ROADMAP.md`, `TCMP_V1.md`, `TO_FIX.md`). No usar en producción.
+
 ## Arquitectura
 
 **TCMP (Tango Cryptographic Messaging Protocol) v2** es el flujo principal que combina:
