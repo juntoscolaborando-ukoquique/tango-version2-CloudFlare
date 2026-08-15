@@ -42,8 +42,9 @@ Antes de producción, sustituir el `ADMIN_BOOTSTRAP_TOKEN` compartido por un pro
 ## Pruebas
 
 ```bash
-node --test pwa/core/tcmp/protocol.test.mjs
-node --test v2/tests/protocol.test.mjs
+npm test
+# includes pwa/core/tcmp/protocol.test.mjs (Tango codec roundtrip,
+# message roundtrip, tampering detection, attachment exact byte roundtrip)
 ```
 
 También verificar en dos dispositivos reales:
